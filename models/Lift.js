@@ -3,8 +3,15 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-//create a schema
+//Sub schema containing specific lift data
 const LiftSchema = new Schema({
+    date: {
+        type: Date,
+        default: Date.now
+    }
+})
+//Main schema containing overhead data
+const MainSchema = new Schema({
     name: {
         type: String,
         required: false
@@ -25,14 +32,13 @@ const LiftSchema = new Schema({
         type: Number,
         required: false
     },
-    workout: {
-        type: Array,
-        required: false
-    },
+    workout: [{ lift: Array, date: Date }],
     date: {
         type: Date,
         default: Date.now
     }
 });
 
-module.exports = Lift = mongoose.model('lift', LiftSchema);
+
+
+module.exports = Lift = mongoose.model('lift', MainSchema);

@@ -21,13 +21,14 @@ class AppModal extends Component {
 
     onSubmit = (e) => {
         e.preventDefault();
+        var d = new Date();
         const newLift = {
             name: this.state.name,
             goal: this.state.goal,
             volume: 0,
             reps: 0,
             max: 0,
-            workout: []
+            workout: { lift: [], date: d }
         }
 
         // Add lift with addlift action
@@ -40,15 +41,15 @@ class AppModal extends Component {
     render() {
         return (
             <div className="modal-container">
-                <Button className="add-btn" onClick={this.toggle}>Add Lift</Button>
+                <Button className="add-btn" onClick={this.toggle}>Create Lift</Button>
                 <Modal isOpen={this.state.modal} toggle={this.toggle}>
-                    <ModalHeader toggle={this.toggle}>Add A Lift</ModalHeader>
+                    <ModalHeader toggle={this.toggle}>Create A Lift</ModalHeader>
                     <ModalBody>
                         <Form onSubmit={this.onSubmit}>
                             <FormGroup>
                                 <Input type="text" name="name" id="lift-name" placeholder="Lift Name" style={{ marginTop: '2rem' }} onChange={this.onChange} />
                                 <Input type="text" name="goal" id="lift-goal" placeholder="Lift Goal Weight" style={{ marginTop: '2rem' }} onChange={this.onChange} />
-                                <Button color="dark">Add Lift</Button>
+                                <Button color="dark">Create Lift</Button>
                             </FormGroup>
                         </Form>
                     </ModalBody>

@@ -1,21 +1,20 @@
 import React, { Component } from 'react';
-import { Container, ListGroup, ListGroupItem, Button } from 'reactstrap';
+import { Container, Button, Dropdown, FormControl } from 'react-bootstrap'
 import { connect } from 'react-redux';
-import { getLift } from '../actions/liftActions';
+import { getLift, updateLift } from '../actions/liftActions';
 import { PropTypes } from 'prop-types';
-import { Line, Bar } from 'react-chartjs-2';
+import { Line } from 'react-chartjs-2';
 
 class TrackLift extends Component {
     componentDidMount() {
         this.props.getLift(window.location.pathname.slice(7));
     }
-
     getLablesArray(lifts) {
-        if (lifts.workout === undefined || lifts.workout.length == 0) {
+        if (lifts.workout.lift === undefined || lifts.workout.lift.length == 0) {
         } else {
             var labelArray = [];
             lifts.workout.map((x, i) => {
-                if (labelArray.includes(lifts.workout[i][2].slice(5, 10))) {
+                if (labelArray.includes(lifts.workout.lift[i][2].slice(5, 10))) {
                 } else {
                     labelArray = labelArray.concat(lifts.workout[i][2].slice(5, 10))
                 }
@@ -25,7 +24,7 @@ class TrackLift extends Component {
     }
 
     getVolArray(lifts) {
-        if (lifts.workout === undefined || lifts.workout.length == 0) {
+        if (lifts.workout.lift === undefined || lifts.workout.lift.length == 0) {
         } else {
             var volArray = [];
             var date;
@@ -47,7 +46,7 @@ class TrackLift extends Component {
     }
 
     getRepsArray(lifts) {
-        if (lifts.workout === undefined || lifts.workout.length == 0) {
+        if (lifts.workout.lift === undefined || lifts.workout.lift.length == 0) {
         } else {
             var repArray = [];
             var date;
@@ -69,7 +68,7 @@ class TrackLift extends Component {
     }
 
     getWeightArray(lifts) {
-        if (lifts.workout === undefined || lifts.workout.length == 0) {
+        if (lifts.workout.lift === undefined || lifts.workout.lift.length == 0) {
         } else {
             var weightArray = [];
             var date;
@@ -90,19 +89,90 @@ class TrackLift extends Component {
         }
     }
 
+    updateVolume() {
+        var weightMoved = 0;
+        var totalWeightMoved = 0
+        this.props.lift.lifts.workout.map((x, i) => (
+            weightMoved = parseInt(this.props.lift.lifts.workout[i][1]) * parseInt(this.props.lift.lifts.workout[i][0]),
+            totalWeightMoved += weightMoved
+        ))
+        totalWeightMoved += this.state.reps * this.state.weight
+        return totalWeightMoved
+    }
+
+    updateMax() {
+        var weightArray = []
+        this.props.lift.lifts.workout.map((x, i) => (
+            weightArray = weightArray.concat(this.props.lift.lifts.workout[i][1])
+        ))
+        var prevMax = Math.max.apply(Math, weightArray)
+        var posMax = this.state.weight
+
+        if (posMax > prevMax) {
+            return posMax
+        } else {
+            return prevMax
+        }
+    }
+
+    updateReps() {
+        var repArray = [];
+        var repTotal = 0;
+        this.props.lift.lifts.workout.map((x, i) => (
+            repArray = repArray.concat(this.props.lift.lifts.workout[i][0])
+        ))
+        for (var i = 0; i < repArray.length; i++) {
+            repTotal += parseInt(repArray[i])
+        }
+        repTotal += parseInt(this.state.reps)
+        return (repTotal)
+    }
+
+    onChange = (e) => {
+        this.setState({ [e.target.name]: e.target.value });
+    }
+
+    onClick = (id, e) => {
+        console.log('onclick')
+        const updatedLift = {
+            name: this.props.lift.lifts.name,
+            goal: this.props.lift.lifts.goal,
+            volume: this.updateVolume(),
+            max: this.updateMax(),
+            reps: this.updateReps(),
+            workout: { lift: [[this.state.reps, this.state.weight]] }
+        }
+
+        //Update lift with updatelift action
+        this.props.updateLift(id, updatedLift);
+    }
+
+    newLift = (id, e) => {
+        console.log('newlift')
+        const updatedLift = {
+            name: this.props.lift.lifts.name,
+            goal: this.props.lift.lifts.goal,
+            // volume: this.updateVolume(),
+            // max: this.updateMax(),
+            // reps: this.updateReps(),
+            workout: { lift: [], date: Date.now }
+        }
+        console.log(updatedLift)
+
+        //Update lift with updatelift action
+        this.props.updateLift(id, updatedLift);
+    }
+
     render() {
         const { lifts } = this.props.lift;
 
         if (!lifts.workout) {
             return <div />
         }
+        console.log(lifts)
         return (
             <Container>
-                <h1>Name: {lifts.name}</h1>
-                <h4>Reps: {lifts.reps}</h4>
-                <h4>Max: {lifts.max}</h4>
-                <h4>Volume: {lifts.volume}</h4>
-                <h4>Goal: {lifts.goal}</h4>
+                <h1>{lifts.name}</h1>
                 <div className="chart">
                     <Line
                         data={{
@@ -121,6 +191,14 @@ class TrackLift extends Component {
                         }}
                     />
                 </div>
+                <Dropdown>
+                    <Dropdown.Toggle variant="success" id="dropdown-basic">Lifts</Dropdown.Toggle>
+                    <Dropdown.Menu>
+                        {lifts.workout.map(({ _id, name, goal, date, reps, max }, i) => (
+                            <Dropdown.Item href={"#/action-" + _id}>{"Lift " + (i + 1) + "  " + date}</Dropdown.Item>
+                        ))}
+                    </Dropdown.Menu>
+                </Dropdown>
 
                 <table id="example" class="table table-striped table-bordered">
                     <thead>
@@ -128,20 +206,20 @@ class TrackLift extends Component {
                             <th>Set</th>
                             <th>Reps</th>
                             <th>Weight</th>
-                            <th>Date</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
-                        {lifts.workout.map((x, i) => (
-                            <tr>
-                                <td>Set {i + 1}</td>
-                                <td>{lifts.workout[i][0]}</td>
-                                <td>{lifts.workout[i][1]}</td>
-                                <td>{lifts.workout[i][2].slice(5, 10)}</td>
-                            </tr>
-                        ))}
+
+                        <tr>
+                            <td>{lifts.workout.length + 1}</td>
+                            <td><FormControl type="text" name="reps" id="lift-name" placeholder="Reps" style={{}} onChange={this.onChange} /></td>
+                            <td><FormControl type="text" name="weight" id="lift-goal" placeholder="Weight" style={{}} onChange={this.onChange} /></td>
+                            <td><Button color="danger" style={{}} onClick={this.onClick.bind(this, window.location.pathname.slice(7))}>Add</Button></td>
+                        </tr>
                     </tbody>
                 </table>
+                <Button color="dark" style={{}} onClick={this.newLift.bind(this, window.location.pathname.slice(7))}>New Lift</Button>
             </Container >
         )
 
@@ -159,4 +237,4 @@ const mapStateToProps = (state) => ({
 })
 
 
-export default connect(mapStateToProps, { getLift })(TrackLift);
+export default connect(mapStateToProps, { updateLift, getLift })(TrackLift);

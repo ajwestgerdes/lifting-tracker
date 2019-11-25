@@ -63,6 +63,7 @@ class AppModal extends Component {
     }
 
     onSubmit = (id, e) => {
+        console.log(id)
         e.preventDefault();
         const updatedLift = {
             name: this.props.lift.lifts.name,
@@ -83,15 +84,15 @@ class AppModal extends Component {
     render() {
         return (
             <div>
-                <Button color="dark" style={{ marginBottom: '2rem' }} onClick={this.toggle}>Add Set</Button>
+                {/* <Button color="dark" style={{ marginBottom: '2rem' }} onClick={this.toggle}>Add Lift</Button> */}
                 <Modal isOpen={this.state.modal} toggle={this.toggle}>
-                    <ModalHeader toggle={this.toggle}>Add Set</ModalHeader>
+                    <ModalHeader toggle={this.toggle}>Add A Lift</ModalHeader>
                     <ModalBody>
                         <Form onSubmit={this.onSubmit.bind(this, window.location.pathname.slice(7))}>
                             <FormGroup>
                                 <Input type="text" name="reps" id="lift-name" placeholder="Reps" style={{ marginTop: '2rem' }} onChange={this.onChange} />
                                 <Input type="text" name="weight" id="lift-goal" placeholder="Weight" style={{ marginTop: '2rem' }} onChange={this.onChange} />
-                                <Button color="dark" style={{ marginTop: '2rem' }}>Add Set</Button>
+                                <Button color="dark" style={{ marginTop: '2rem' }}>Add Lift</Button>
                             </FormGroup>
                         </Form>
                     </ModalBody>

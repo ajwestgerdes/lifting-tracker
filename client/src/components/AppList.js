@@ -46,18 +46,9 @@ class AppList extends Component {
                             <div class="col-sm-4 lift-card">
                                 <div class="card text-center">
                                     <a href={'lifts/' + _id} class="">
-                                        <div class="card-header" id={"lift-info" + i} onMouseOver={this.onMouseEnter} onMouseLeave={this.onMouseLeave} isOpen={this.state.dropdownOpen} toggle={this.toggle}>{name}
-
+                                        <div class="card-header" id={"lift-info" + i} toggle={this.toggle}>{name}
+                                            <div class="text-muted">Last Updated {date.slice(5, 10)}</div>
                                         </div>
-                                        <UncontrolledCollapse toggler={"#lift-info" + i}>
-                                            <div class="card-body">
-                                                <p class="card-text">Max Weight: {max}</p>
-                                                <p class="card-text">Total Reps: {reps}</p>
-                                                <p class="card-text">Goal Weight: {goal}</p>
-                                                <a href='/' onClick={this.onClickDelete.bind(this, _id)} class="btn btn-danger btn-sm float-right">X</a>
-                                            </div>
-                                            <div class="card-footer text-muted">Last Updated {date.slice(5, 10)}</div>
-                                        </UncontrolledCollapse>
                                     </a>
                                 </div>
 
