@@ -9,158 +9,66 @@ class TrackLift extends Component {
     componentDidMount() {
         this.props.getLift(window.location.pathname.slice(7));
     }
+
     getLablesArray(lifts) {
-        if (lifts.workout.lift === undefined || lifts.workout.lift.length == 0) {
+        if (lifts.workout === undefined || lifts.workout.length === 0) {
         } else {
             var labelArray = [];
             lifts.workout.map((x, i) => {
-                if (labelArray.includes(lifts.workout.lift[i][2].slice(5, 10))) {
-                } else {
-                    labelArray = labelArray.concat(lifts.workout[i][2].slice(5, 10))
-                }
+                return labelArray = labelArray.concat("Lift " + (i + 1))
             })
             return labelArray
         }
     }
 
     getVolArray(lifts) {
-        if (lifts.workout.lift === undefined || lifts.workout.lift.length == 0) {
+        if (lifts.workout === undefined || lifts.workout.length === 0) {
         } else {
             var volArray = [];
-            var date;
             var volTotal = 0;
-            var prevDate = lifts.workout[0][2].slice(5, 10)
             lifts.workout.map((x, i) => {
-                date = lifts.workout[i][2].slice(5, 10);
-                if (date == prevDate || i == lifts.workout.length) {
-                    volTotal += parseInt(lifts.workout[i][1] * lifts.workout[i][0])
-                } else {
-                    volArray = volArray.concat(volTotal)
-                    prevDate = lifts.workout[i][2].slice(5, 10)
-                    volTotal = parseInt(lifts.workout[i][0]);
+                volTotal = 0;
+                for (var j = 0; j < lifts.workout[i].lift.length; j++) {
+                    volTotal += lifts.workout[i].lift[j][0] * lifts.workout[i].lift[j][1]
                 }
+                volArray = volArray.concat(volTotal)
+                return volArray
             })
-            volArray = volArray.concat(volTotal)
             return volArray
         }
-    }
-
-    getRepsArray(lifts) {
-        if (lifts.workout.lift === undefined || lifts.workout.lift.length == 0) {
-        } else {
-            var repArray = [];
-            var date;
-            var repsTotal = 0;
-            var prevDate = lifts.workout[0][2].slice(5, 10)
-            lifts.workout.map((x, i) => {
-                date = lifts.workout[i][2].slice(5, 10);
-                if (date == prevDate || i == lifts.workout.length) {
-                    repsTotal += parseInt(lifts.workout[i][0])
-                } else {
-                    repArray = repArray.concat(repsTotal)
-                    prevDate = lifts.workout[i][2].slice(5, 10)
-                    repsTotal = parseInt(lifts.workout[i][0]);
-                }
-            })
-            repArray = repArray.concat(repsTotal)
-            return repArray
-        }
-    }
-
-    getWeightArray(lifts) {
-        if (lifts.workout.lift === undefined || lifts.workout.lift.length == 0) {
-        } else {
-            var weightArray = [];
-            var date;
-            var weightTotal = 0;
-            var prevDate = lifts.workout[0][2].slice(5, 10)
-            lifts.workout.map((x, i) => {
-                date = lifts.workout[i][2].slice(5, 10);
-                if (date == prevDate || i == lifts.workout.length) {
-                    weightTotal += parseInt(lifts.workout[i][1])
-                } else {
-                    weightArray = weightArray.concat(weightTotal)
-                    prevDate = lifts.workout[i][2].slice(5, 10)
-                    weightTotal = parseInt(lifts.workout[i][1]);
-                }
-            })
-            weightArray = weightArray.concat(weightTotal)
-            return weightArray
-        }
-    }
-
-    updateVolume() {
-        var weightMoved = 0;
-        var totalWeightMoved = 0
-        this.props.lift.lifts.workout.map((x, i) => (
-            weightMoved = parseInt(this.props.lift.lifts.workout[i][1]) * parseInt(this.props.lift.lifts.workout[i][0]),
-            totalWeightMoved += weightMoved
-        ))
-        totalWeightMoved += this.state.reps * this.state.weight
-        return totalWeightMoved
-    }
-
-    updateMax() {
-        var weightArray = []
-        this.props.lift.lifts.workout.map((x, i) => (
-            weightArray = weightArray.concat(this.props.lift.lifts.workout[i][1])
-        ))
-        var prevMax = Math.max.apply(Math, weightArray)
-        var posMax = this.state.weight
-
-        if (posMax > prevMax) {
-            return posMax
-        } else {
-            return prevMax
-        }
-    }
-
-    updateReps() {
-        var repArray = [];
-        var repTotal = 0;
-        this.props.lift.lifts.workout.map((x, i) => (
-            repArray = repArray.concat(this.props.lift.lifts.workout[i][0])
-        ))
-        for (var i = 0; i < repArray.length; i++) {
-            repTotal += parseInt(repArray[i])
-        }
-        repTotal += parseInt(this.state.reps)
-        return (repTotal)
     }
 
     onChange = (e) => {
         this.setState({ [e.target.name]: e.target.value });
     }
 
-    onClick = (id, e) => {
-        console.log('onclick')
+    onClick = (id, selectedLift, e) => {
         const updatedLift = {
             name: this.props.lift.lifts.name,
             goal: this.props.lift.lifts.goal,
-            volume: this.updateVolume(),
-            max: this.updateMax(),
-            reps: this.updateReps(),
-            workout: { lift: [[this.state.reps, this.state.weight]] }
+            workout: { lift: [[this.state.reps, this.state.weight]] },
+            liftID: { selectedLift }
         }
-
         //Update lift with updatelift action
         this.props.updateLift(id, updatedLift);
     }
 
+    state = { selectedLift: 0 }
+    selectLift = (e) => {
+        this.setState({ selectedLift: e })
+    }
+
     newLift = (id, e) => {
-        console.log('newlift')
+        this.selectLift(this.props.lift.lifts.workout.length)
         const updatedLift = {
             name: this.props.lift.lifts.name,
             goal: this.props.lift.lifts.goal,
-            // volume: this.updateVolume(),
-            // max: this.updateMax(),
-            // reps: this.updateReps(),
             workout: { lift: [], date: Date.now }
         }
-        console.log(updatedLift)
 
         //Update lift with updatelift action
         this.props.updateLift(id, updatedLift);
+
     }
 
     render() {
@@ -169,7 +77,6 @@ class TrackLift extends Component {
         if (!lifts.workout) {
             return <div />
         }
-        console.log(lifts)
         return (
             <Container>
                 <h1>{lifts.name}</h1>
@@ -192,15 +99,16 @@ class TrackLift extends Component {
                     />
                 </div>
                 <Dropdown>
-                    <Dropdown.Toggle variant="success" id="dropdown-basic">Lifts</Dropdown.Toggle>
+                    <Dropdown.Toggle variant="success" id="dropdown-basic">{"Lift:  " + (this.state.selectedLift + 1)}</Dropdown.Toggle>
                     <Dropdown.Menu>
-                        {lifts.workout.map(({ _id, name, goal, date, reps, max }, i) => (
-                            <Dropdown.Item href={"#/action-" + _id}>{"Lift " + (i + 1) + "  " + date}</Dropdown.Item>
+
+                        {lifts.workout.map(({ _id, date }, i) => (
+                            <Dropdown.Item href={"#action-" + i} onClick={() => this.selectLift(i)}>{"Lift " + (i + 1)}</Dropdown.Item>
                         ))}
                     </Dropdown.Menu>
                 </Dropdown>
 
-                <table id="example" class="table table-striped table-bordered">
+                <table id="example" className="table table-striped table-bordered">
                     <thead>
                         <tr>
                             <th>Set</th>
@@ -209,17 +117,35 @@ class TrackLift extends Component {
                             <th></th>
                         </tr>
                     </thead>
-                    <tbody>
+                    {(() => {
+                        if (lifts.workout[this.state.selectedLift] === undefined) {
+                            return (
+                                <div></div>
+                            )
+                        } else {
+                            return (
+                                <tbody>
+                                    {lifts.workout[this.state.selectedLift].lift.map((e, i) => (
+                                        <tr>
+                                            <td>{i + 1}</td>
+                                            <td>{lifts.workout[this.state.selectedLift].lift[i][0]}</td>
+                                            <td>{lifts.workout[this.state.selectedLift].lift[i][1]}</td>
+                                        </tr>
+                                    ))}
+                                    <tr>
+                                        <td>{lifts.workout[this.state.selectedLift].lift.length + 1}</td>
+                                        <td><FormControl type="text" name="reps" id="lift-name" placeholder="Reps" onChange={this.onChange} /></td>
+                                        <td><FormControl type="text" name="weight" id="lift-goal" placeholder="Weight" onChange={this.onChange} /></td>
+                                        <td><Button color="danger" onClick={this.onClick.bind(this, window.location.pathname.slice(7), this.state.selectedLift)}>Add</Button></td>
+                                    </tr>
+                                </tbody>
+                            )
+                        }
+                    })()}
 
-                        <tr>
-                            <td>{lifts.workout.length + 1}</td>
-                            <td><FormControl type="text" name="reps" id="lift-name" placeholder="Reps" style={{}} onChange={this.onChange} /></td>
-                            <td><FormControl type="text" name="weight" id="lift-goal" placeholder="Weight" style={{}} onChange={this.onChange} /></td>
-                            <td><Button color="danger" style={{}} onClick={this.onClick.bind(this, window.location.pathname.slice(7))}>Add</Button></td>
-                        </tr>
-                    </tbody>
                 </table>
-                <Button color="dark" style={{}} onClick={this.newLift.bind(this, window.location.pathname.slice(7))}>New Lift</Button>
+
+                <Button color="dark" href={window.location.href.split('#')[0] + "#action-" + lifts.workout.length} onClick={this.newLift.bind(this, window.location.pathname.slice(7))}>New Lift</Button>
             </Container >
         )
 

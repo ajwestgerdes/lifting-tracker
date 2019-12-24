@@ -76,8 +76,9 @@ router.post('/update/:id', (req, res) => {
                 lift.max = req.body.max;
                 lift.reps = req.body.reps
                 lift.volume = req.body.volume
-                lift.workout[0].lift = lift.workout[0].lift.concat(req.body.workout.lift);
-
+                console.log(req.body.workout.lift)
+                console.log(req.body.liftID.selectedLift)
+                lift.workout[req.body.liftID.selectedLift].lift = lift.workout[req.body.liftID.selectedLift].lift.concat(req.body.workout.lift);
                 lift.save().then(lift => res.json(lift));
             })
     }

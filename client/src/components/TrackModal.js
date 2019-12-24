@@ -13,17 +13,6 @@ class AppModal extends Component {
         this.props.getLift(window.location.pathname.slice(7));
     }
 
-    updateVolume() {
-        var weightMoved = 0;
-        var totalWeightMoved = 0
-        this.props.lift.lifts.workout.map((x, i) => (
-            weightMoved = parseInt(this.props.lift.lifts.workout[i][1]) * parseInt(this.props.lift.lifts.workout[i][0]),
-            totalWeightMoved += weightMoved
-        ))
-        totalWeightMoved += this.state.reps * this.state.weight
-        return totalWeightMoved
-    }
-
     updateMax() {
         var weightArray = []
         this.props.lift.lifts.workout.map((x, i) => (
@@ -68,7 +57,6 @@ class AppModal extends Component {
         const updatedLift = {
             name: this.props.lift.lifts.name,
             goal: this.props.lift.lifts.goal,
-            volume: this.updateVolume(),
             max: this.updateMax(),
             reps: this.updateReps(),
             workout: [[this.state.reps, this.state.weight, this.props.lift.lifts.date]]

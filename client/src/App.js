@@ -3,7 +3,6 @@
 import React, { Component } from 'react';
 import AppNavbar from './components/AppNavbar';
 import AppList from './components/AppList';
-import AppModal from './components/AppModal';
 import TrackLift from './components/TrackLift';
 import TrackModal from './components/TrackModal';
 import { Container } from 'reactstrap';

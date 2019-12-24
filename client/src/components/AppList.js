@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Container, ListGroup, ListGroupItem, Button, UncontrolledCollapse } from 'reactstrap';
+import { Container, ListGroup } from 'reactstrap';
 import AppModal from './AppModal';
 import { connect } from 'react-redux';
 import { getLifts, deleteLift } from '../actions/liftActions';
