@@ -41,7 +41,7 @@ class AppModal extends Component {
     render() {
         return (
             <div className="modal-container">
-                <Button className="add-btn" onClick={this.toggle}>Create Lift</Button>
+                <Button className="creat-lift-btn" onClick={this.toggle}>Create Lift</Button>
                 <Modal isOpen={this.state.modal} toggle={this.toggle}>
                     <ModalHeader toggle={this.toggle}>Create A Lift</ModalHeader>
                     <ModalBody>

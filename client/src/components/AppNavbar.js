@@ -9,7 +9,7 @@ class AppNavbar extends Component {
     render() {
         return (
             <div>
-                <Navbar dark expand="sm">
+                <Navbar expand="sm">
                     <Container>
                         <NavbarBrand href="/">Lifting Tracker</NavbarBrand>
                     </Container>

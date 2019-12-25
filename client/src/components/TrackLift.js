@@ -89,7 +89,7 @@ class TrackLift extends Component {
                                     type: "line",
                                     label: 'Total Weight Moved',
                                     data: this.getVolArray(lifts),
-                                    backgroundColor: 'rgba(153, 102, 255, 0.2)'
+                                    backgroundColor: '#cf6766'
                                 }
 
                             ]
@@ -99,7 +99,7 @@ class TrackLift extends Component {
                     />
                 </div>
                 <Dropdown>
-                    <Dropdown.Toggle variant="success" id="dropdown-basic">{"Lift:  " + (this.state.selectedLift + 1)}</Dropdown.Toggle>
+                    <Dropdown.Toggle className="dropdown-lift" id="dropdown-basic">{"Lift:  " + (this.state.selectedLift + 1)}</Dropdown.Toggle>
                     <Dropdown.Menu>
 
                         {lifts.workout.map(({ _id, date }, i) => (
@@ -136,7 +136,8 @@ class TrackLift extends Component {
                                         <td>{lifts.workout[this.state.selectedLift].lift.length + 1}</td>
                                         <td><FormControl type="text" name="reps" id="lift-name" placeholder="Reps" onChange={this.onChange} /></td>
                                         <td><FormControl type="text" name="weight" id="lift-goal" placeholder="Weight" onChange={this.onChange} /></td>
-                                        <td><Button color="danger" onClick={this.onClick.bind(this, window.location.pathname.slice(7), this.state.selectedLift)}>Add</Button></td>
+                                        <td><Button className="add-rw-btn"
+                                            onClick={this.onClick.bind(this, window.location.pathname.slice(7), this.state.selectedLift)}>Add</Button></td>
                                     </tr>
                                 </tbody>
                             )
@@ -145,7 +146,9 @@ class TrackLift extends Component {
 
                 </table>
 
-                <Button color="dark" href={window.location.href.split('#')[0] + "#action-" + lifts.workout.length} onClick={this.newLift.bind(this, window.location.pathname.slice(7))}>New Lift</Button>
+                <Button className="new-lift-btn"
+                    href={window.location.href.split('#')[0] + "#action-" + lifts.workout.length}
+                    onClick={this.newLift.bind(this, window.location.pathname.slice(7))}>New Lift</Button>
             </Container >
         )
 

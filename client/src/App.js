@@ -1,10 +1,7 @@
-//Main app where all the components come together to form the web application
-
 import React, { Component } from 'react';
 import AppNavbar from './components/AppNavbar';
 import AppList from './components/AppList';
 import TrackLift from './components/TrackLift';
-import TrackModal from './components/TrackModal';
 import { Container } from 'reactstrap';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 
@@ -24,7 +21,6 @@ class App extends Component {
               <AppNavbar />
               <Route exact path="/" component={AppList} />
               <Route path="/lifts" component={TrackLift} />
-              <Route path="/lifts" component={TrackModal} />
             </Container>
           </div>
         </Provider>

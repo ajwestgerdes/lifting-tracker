@@ -41,19 +41,17 @@ class AppList extends Component {
         return (
             <Container>
                 <ListGroup>
-                    <div class="row">
+                    <div className="row">
                         {lifts.map(({ _id, name, goal, date, reps, max }, i) => (
-                            <div class="col-sm-4 lift-card">
-                                <div class="card text-center">
-                                    <a href={'lifts/' + _id} class="">
-                                        <div class="card-header" id={"lift-info" + i} toggle={this.toggle}>{name}
-                                            <div class="text-muted">Last Updated {date.slice(5, 10)}</div>
+                            <div className="col-sm-4 lift-card">
+                                <div className="card text-center">
+                                    <a href={'lifts/' + _id}>
+                                        <div className="card-header" id={"lift-info" + i}>{name}
+                                            <div className="text-muted">Last Updated {date.slice(5, 10)}</div>
                                         </div>
                                     </a>
                                 </div>
-
                             </div>
-
                         ))}
                         <AppModal />
                     </div>
