@@ -40,9 +40,10 @@ router.get('/:id', (req, res) => {
 })
 
 //@route DELETE api/lifts
-//@desc Create A Post
+//@desc Delete a workout
 //@access public
 router.delete('/delete/:id', (req, res) => {
+    console.log(req.params.id)
     Lift.findById(req.params.id)
         .then(lift => lift.remove().then(() => res.json({ success: true })))
         .catch(err => res.satus(404).json({ success: false }));
@@ -52,12 +53,9 @@ router.delete('/delete/:id', (req, res) => {
 //@desc Update A Lift
 //@access public
 router.post('/update/:id', (req, res) => {
-    console.log(req.body.workout.lift.length)
     if (req.body.workout.lift.length === 0) {
-        console.log('if statment')
         Lift.findById(req.params.id)
             .then(lift => {
-                console.log(lift.workout)
                 lift.name = req.body.name;
                 lift.goal = req.body.goal;
                 lift.max = req.body.max;
@@ -68,7 +66,6 @@ router.post('/update/:id', (req, res) => {
                 lift.save().then(lift => res.json(lift));
             })
     } else {
-        console.log('else statment')
         Lift.findById(req.params.id)
             .then(lift => {
                 lift.name = req.body.name;
@@ -76,8 +73,6 @@ router.post('/update/:id', (req, res) => {
                 lift.max = req.body.max;
                 lift.reps = req.body.reps
                 lift.volume = req.body.volume
-                console.log(req.body.workout.lift)
-                console.log(req.body.liftID.selectedLift)
                 lift.workout[req.body.liftID.selectedLift].lift = lift.workout[req.body.liftID.selectedLift].lift.concat(req.body.workout.lift);
                 lift.save().then(lift => res.json(lift));
             })

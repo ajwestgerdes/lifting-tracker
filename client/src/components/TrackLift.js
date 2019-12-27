@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { Container, Button, Dropdown, FormControl } from 'react-bootstrap'
 import { connect } from 'react-redux';
-import { getLift, updateLift } from '../actions/liftActions';
+import { getLift, updateLift, deleteWorkout } from '../actions/liftActions';
 import { PropTypes } from 'prop-types';
 import { Line } from 'react-chartjs-2';
+import { TiCogOutline } from "react-icons/ti";
 
 class TrackLift extends Component {
     componentDidMount() {
@@ -42,15 +43,20 @@ class TrackLift extends Component {
         this.setState({ [e.target.name]: e.target.value });
     }
 
-    onClick = (id, selectedLift, e) => {
-        const updatedLift = {
-            name: this.props.lift.lifts.name,
-            goal: this.props.lift.lifts.goal,
-            workout: { lift: [[this.state.reps, this.state.weight]] },
-            liftID: { selectedLift }
+    onClick = (id, selectedLift) => {
+        if (this.state.reps !== undefined && this.state.weight !== undefined) {
+            const updatedLift = {
+                name: this.props.lift.lifts.name,
+                goal: this.props.lift.lifts.goal,
+                workout: { lift: [[this.state.reps, this.state.weight]] },
+                liftID: { selectedLift }
+            }
+            //Update lift with updatelift action
+            this.props.updateLift(id, updatedLift);
+        } else {
+            alert('Please enter values for reps and weight')
         }
-        //Update lift with updatelift action
-        this.props.updateLift(id, updatedLift);
+
     }
 
     state = { selectedLift: 0 }
@@ -71,6 +77,11 @@ class TrackLift extends Component {
 
     }
 
+    rmWorkout = (id) => {
+        console.log("rmWorkout called")
+        this.props.deleteWorkout(id)
+    }
+
     render() {
         const { lifts } = this.props.lift;
 
@@ -80,6 +91,13 @@ class TrackLift extends Component {
         return (
             <Container>
                 <h1>{lifts.name}</h1>
+                <Dropdown>
+                    <Dropdown.Toggle className="dropdown-lift" id="dropdown-basic"><TiCogOutline /></Dropdown.Toggle>
+                    <Dropdown.Menu>
+                        <Dropdown.Item href="/" onClick={() => this.rmWorkout(lifts._id)}>Delete Workout</Dropdown.Item>
+                        {/* <Dropdown.Item href="" onClick={() => this.rmWorkout(lifts.workout[this.state.selectedLift]._id)}>Delete Lift</Dropdown.Item> */}
+                    </Dropdown.Menu>
+                </Dropdown>
                 <div className="chart">
                     <Line
                         data={{
@@ -166,4 +184,4 @@ const mapStateToProps = (state) => ({
 })
 
 
-export default connect(mapStateToProps, { updateLift, getLift })(TrackLift);
+export default connect(mapStateToProps, { updateLift, getLift, deleteWorkout })(TrackLift);

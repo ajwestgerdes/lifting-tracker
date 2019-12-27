@@ -1,6 +1,6 @@
 //Holds all the reducers for the action files
 
-import { GET_LIFTS, ADD_LIFT, DELETE_LIFT, LIFTS_LOADING, GET_LIFT, UPDATE_LIFT } from '../actions/types';
+import { GET_LIFTS, ADD_LIFT, DELETE_WORKOUT, LIFTS_LOADING, GET_LIFT, UPDATE_LIFT } from '../actions/types';
 
 
 const initialState = {
@@ -22,11 +22,7 @@ export default function (state = initialState, action) {
                 lifts: action.payload,
                 loading: false
             };
-        case DELETE_LIFT:
-            return {
-                ...state,
-                lifts: state.lifts.filter(lift => lift._id !== action.payload)
-            };
+
         case UPDATE_LIFT:
             return {
                 ...state,

@@ -41,15 +41,14 @@ class AppModal extends Component {
     render() {
         return (
             <div className="modal-container">
-                <Button className="creat-lift-btn" onClick={this.toggle}>Create Lift</Button>
+                <Button className="creat-lift-btn" onClick={this.toggle}>Create Workout</Button>
                 <Modal isOpen={this.state.modal} toggle={this.toggle}>
-                    <ModalHeader toggle={this.toggle}>Create A Lift</ModalHeader>
+                    <ModalHeader toggle={this.toggle}>Create A Workout</ModalHeader>
                     <ModalBody>
                         <Form onSubmit={this.onSubmit}>
                             <FormGroup>
                                 <Input type="text" name="name" id="lift-name" placeholder="Lift Name" style={{ marginTop: '2rem' }} onChange={this.onChange} />
-                                <Input type="text" name="goal" id="lift-goal" placeholder="Lift Goal Weight" style={{ marginTop: '2rem' }} onChange={this.onChange} />
-                                <Button color="dark">Create Lift</Button>
+                                <Button color="dark">Create Workout</Button>
                             </FormGroup>
                         </Form>
                     </ModalBody>

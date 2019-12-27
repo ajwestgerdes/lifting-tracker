@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Container, ListGroup } from 'reactstrap';
 import AppModal from './AppModal';
 import { connect } from 'react-redux';
-import { getLifts, deleteLift } from '../actions/liftActions';
+import { getLifts } from '../actions/liftActions';
 import { PropTypes } from 'prop-types';
 
 class AppList extends Component {
@@ -10,30 +10,14 @@ class AppList extends Component {
         super(props);
         this.toggle = this.toggle.bind(this);
         this.state = { collapse: false };
-        this.onMouseEnter = this.onMouseEnter.bind(this);
-        this.onMouseLeave = this.onMouseLeave.bind(this);
     }
 
     toggle() {
         this.setState(state => ({ collapse: !state.collapse }));
     }
 
-    onMouseEnter() {
-        this.setState({ collapse: true });
-    }
-
-    onMouseLeave() {
-        this.setState({ collapse: false });
-    }
-
-
     componentDidMount() {
         this.props.getLifts();
-    }
-
-    onClickDelete = (id) => {
-        this.props.deleteLift(id);
-
     }
 
     render() {
@@ -71,4 +55,4 @@ const mapStateToProps = (state) => ({
 })
 
 
-export default connect(mapStateToProps, { getLifts, deleteLift })(AppList);
+export default connect(mapStateToProps, { getLifts })(AppList);

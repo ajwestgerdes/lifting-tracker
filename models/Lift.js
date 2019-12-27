@@ -3,13 +3,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-//Sub schema containing specific lift data
-const LiftSchema = new Schema({
-    date: {
-        type: Date,
-        default: Date.now
-    }
-})
 //Main schema containing overhead data
 const MainSchema = new Schema({
     name: {
