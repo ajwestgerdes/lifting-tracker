@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Container, Button, Dropdown, FormControl } from 'react-bootstrap'
 import { connect } from 'react-redux';
-import { getLift, updateLift, deleteWorkout } from '../actions/liftActions';
+import { getLift, updateLift, deleteWorkout, deleteLifts } from '../actions/liftActions';
 import { PropTypes } from 'prop-types';
 import { Line } from 'react-chartjs-2';
 import { TiCogOutline } from "react-icons/ti";
@@ -82,6 +82,11 @@ class TrackLift extends Component {
         this.props.deleteWorkout(id)
     }
 
+    rmLift = (id) => {
+        console.log("rmWorkout called")
+        this.props.deleteLifts(id)
+    }
+
     render() {
         const { lifts } = this.props.lift;
 
@@ -95,7 +100,7 @@ class TrackLift extends Component {
                     <Dropdown.Toggle className="dropdown-lift" id="dropdown-basic"><TiCogOutline /></Dropdown.Toggle>
                     <Dropdown.Menu>
                         <Dropdown.Item href="/" onClick={() => this.rmWorkout(lifts._id)}>Delete Workout</Dropdown.Item>
-                        {/* <Dropdown.Item href="" onClick={() => this.rmWorkout(lifts.workout[this.state.selectedLift]._id)}>Delete Lift</Dropdown.Item> */}
+                        <Dropdown.Item href="" onClick={() => this.rmLift(lifts.workout[this.state.selectedLift]._id)}>Delete Lift</Dropdown.Item>
                     </Dropdown.Menu>
                 </Dropdown>
                 <div className="chart">
@@ -184,4 +189,4 @@ const mapStateToProps = (state) => ({
 })
 
 
-export default connect(mapStateToProps, { updateLift, getLift, deleteWorkout })(TrackLift);
+export default connect(mapStateToProps, { updateLift, getLift, deleteWorkout, deleteLifts })(TrackLift);

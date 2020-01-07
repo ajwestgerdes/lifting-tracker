@@ -43,6 +43,15 @@ router.get('/:id', (req, res) => {
 //@desc Delete a workout
 //@access public
 router.delete('/delete/:id', (req, res) => {
+    Lift.findById(req.params.id)
+        .then(lift => lift.remove().then(() => res.json({ success: true })))
+        .catch(err => res.satus(404).json({ success: false }));
+});
+
+//@route DELETE api/lifts
+//@desc Delete a workout
+//@access public
+router.delete('/delete/lift/:id', (req, res) => {
     console.log(req.params.id)
     Lift.findById(req.params.id)
         .then(lift => lift.remove().then(() => res.json({ success: true })))

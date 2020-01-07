@@ -3,6 +3,7 @@
 export const GET_LIFTS = 'GET_LIFTS';
 export const ADD_LIFT = 'ADD_LIFT';
 export const DELETE_WORKOUT = 'DELETE_WORKOUT';
+export const DELETE_LIFT = 'DELETE_LIFT';
 export const UPDATE_LIFT = 'UPDATE_LIFT';
 export const LIFTS_LOADING = 'LIFTS_LOADING';
 export const GET_LIFT = 'GET_LIFT';
